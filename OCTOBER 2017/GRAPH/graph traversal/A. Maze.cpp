@@ -24,11 +24,112 @@ using namespace std;
 //#define double long double
 #define PI 3.141592653589
 
+char s[509][509];
+int n,m,k;
+
+const int DX[] = {0,1,0,-1};
+const int DY[] = {1,0,-1,0};
+
+map<pair<int,int>,int> visited;
+
+bool checkCell(int x, int y)
+{
+    if (x < 0 || x >= n || y < 0 || y >= m)
+        return false;
+    return s[x][y] == '.';
+}
+
+
+void bfs(pair<int,int> src)
+{
+    visited[src]=1;
+    queue<pair<int,int> > q;
+    q.push(src);
+    while(!q.empty())
+    {
+        int xx= q.front().first;
+        int yy= q.front().second;
+        q.pop();
+        int flag=0;
+        for (int i = 0; i < 4; i++)
+        {
+            int xxx = xx + DX[i];
+            int yyy = yy + DY[i];
+            if(checkCell(xxx,yyy))
+            {
+                if(s[xxx][yyy]=='.')
+                {
+                    if(visited[mp(xxx,yyy)]==0)
+                    {
+                        flag=1;
+                        visited[mp(xxx,yyy)]=1;
+                        q.push(mp(xxx,yyy));
+                    }
+                }
+
+            }
+        }
+        if(flag==0)
+        {
+            if(k==0) return;
+            k--;
+            s[xx][yy]='X';
+            if(k==0) return;
+        }
+    }
+    return;
+}
+
+
+void dfs(pair<int,int> src)
+{
+    visited[src]=1;
+    int xc = src.x;
+    int yc = src.y;
+    for (int d = 0; d < 4; d++)
+    {
+        int xx = xc + DX[d];
+        int yy = yc + DY[d];
+        if (!checkCell(xx, yy))
+            continue;
+        if (visited[mp(xx,yy)])
+            continue;
+        dfs(mp(xx, yy));
+    }
+    if(k==0) return;
+    k--;
+    s[xc][yc]='X';
+    return;
+}
+
+
 int main()
 {
-    int n,m,k;
     siii(n,m,k);
-    char s[509][509];
+    pair<int,int> sc;
+    int ff=0;
+    f(i,0,n)
+    {
+        f(j,0,m)
+        {
+            cin>>s[i][j];
+            if(ff==0 && s[i][j]=='.')
+            {
+                sc = mp(i,j);
+                ff=1;
+            }
+        }
+    }
+    dfs(sc);
+    f(i,0,n)
+    {
+        f(j,0,m)
+        {
+            cout<<s[i][j];
+        }
+        cout<<endl;
+    }
+
 }
 
 
